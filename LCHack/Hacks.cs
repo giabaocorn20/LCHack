@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.UI;
 
 namespace LCHack
@@ -53,7 +54,23 @@ namespace LCHack
             public bool isHighScrapValueEnabled = false;
             public bool isHighJumpEnabled = false;
             public bool isNightVisionEnabled = false;
+            public bool isEnemySpawned = false;
 
+            // create a class to store dead player information
+            public class DeadPlayerInfo
+            {
+                public string playerName;
+                public float timeOfDeath;
+
+                public DeadPlayerInfo(string playerName, float timeOfDeath)
+                {
+                    this.playerName = playerName;
+                    this.timeOfDeath = timeOfDeath;
+                }
+            }
+
+            // Maintain a list of dead players
+            public List<DeadPlayerInfo> deadPlayers = new List<DeadPlayerInfo>();
 
 
             #region Keypress logic
@@ -139,7 +156,31 @@ namespace LCHack
                 CacheObjects<PlayerControllerB>();
                 CacheObjects<SteamValveHazard>();
                 CacheObjects<EnemyAI>();
+
                 UpdateEnemyCount();
+                UpdateDeadPlayerInfo();
+            }
+
+            void UpdateDeadPlayerInfo()
+            {
+                if (objectCache.TryGetValue(typeof(PlayerControllerB), out var players))
+                {
+                    foreach (PlayerControllerB player in players.Cast<PlayerControllerB>())
+                    {
+                        if (player.isPlayerDead && !deadPlayers.Any(deadPlayer => deadPlayer.playerName == player.playerUsername))
+                        {
+                            deadPlayers.Add(new DeadPlayerInfo(player.playerUsername, Time.time));
+                        }
+                        if (!player.isPlayerDead && deadPlayers.Any(deadPlayer => deadPlayer.playerName == player.playerUsername))
+                        {
+                            deadPlayers.RemoveAll(deadPlayer => deadPlayer.playerName == player.playerUsername);
+                        }
+                    }
+                }
+                else
+                {
+                    deadPlayers.Clear();
+                }
             }
 
             void UpdateEnemyCount()
@@ -225,27 +266,10 @@ namespace LCHack
                     }
                 }
             }
-            // create a class to store dead player information
-            public class DeadPlayerInfo
-            {
-                public string playerName;
-                public float timeOfDeath;
-
-                public DeadPlayerInfo(string playerName, float timeOfDeath)
-                {
-                    this.playerName = playerName;
-                    this.timeOfDeath = timeOfDeath;
-                }
-            }
-
-            // Maintain a list of dead players
-            private List<DeadPlayerInfo> deadPlayers = new List<DeadPlayerInfo>();
-
+           
             //ProcessPlayers is a special case of ProcessObjects that only processes PlayerControllerB objects
             private void ProcessPlayers()
             {
-
-                int playerCount = 0;
                 if (!objectCache.TryGetValue(typeof(PlayerControllerB), out var cachedPlayers))
                     return;
 
@@ -253,21 +277,7 @@ namespace LCHack
                 {
                     if (player.isPlayerDead || player.IsLocalPlayer || player.playerUsername == GameNetworkManager.Instance.localPlayerController.playerUsername || player.disconnectedMidGame)
                     {
-                        // If the player is dead, add their information to the list
-                        if (player.isPlayerDead && !deadPlayers.Any(dp => dp.playerName == player.playerUsername))
-                        {
-                            deadPlayers.Add(new DeadPlayerInfo(player.playerUsername, Time.time));
-                        }
-
                         continue;
-
-                    }
-                    if (player.isPlayerDead)
-                    {
-                        playerCount++;
-                        string deadPlayer = player.playerUsername + " ";
-
-
                     }
 
                     Vector3 screen;
@@ -347,21 +357,24 @@ namespace LCHack
             // OnGUI is called once per frame
             public void OnGUI()
             {
-                //Top Left Label
-
-                GUI.Label(new Rect(10f, 5f, 200f, 30f), "Dead Player");
-
-                float labelHeight = 25f;
-                float padding = 5f;
-
-                foreach (DeadPlayerInfo deadPlayer in deadPlayers)
-                {
-                    float y = 45f + deadPlayers.IndexOf(deadPlayer) * (labelHeight + padding);
-                    GUI.Label(new Rect(10f, y, 200f, labelHeight), $"Dead player: {deadPlayer.playerName} ({deadPlayer.timeOfDeath})");
-                }
-
                 if (StartOfRound.Instance != null)
+                {
                     GUI.Label(new Rect(10f, 25f, 200f, 30f), $"Enemy count: {enemyCount}");
+                    GUI.Label(new Rect(10f, 5f, 200f, 30f), "Dead Player");
+                    
+                   
+                        float labelHeight = 25f;
+                        float padding = 5f;
+
+                        foreach (DeadPlayerInfo deadPlayer in deadPlayers)
+                        {
+                            float y = 45f + deadPlayers.IndexOf(deadPlayer) * (labelHeight + padding);
+                            GUI.Label(new Rect(10f, y, 200f, labelHeight), $"Dead player: {deadPlayer.playerName} ({deadPlayer.timeOfDeath})");
+                        }
+                   
+            
+                }
+                
 
 
                 if (isMenuOpen)
@@ -450,7 +463,8 @@ namespace LCHack
 
                 GUILayout.Label($"God mode: {(isGodModeEnabled ? "enabled" : "disabled")}");
                 GUILayout.Label($"Infinite sprint: {(isInfiniteSprintEnabled ? "enabled" : "disabled")}");
-                GUILayout.Label($"High Jump: {(isHighJumpEnabled ? "enabled" : "disabled")}");
+                GUILayout.Label($"High jump: {(isHighJumpEnabled ? "enabled" : "disabled")}");
+                GUILayout.Label($"Enemies spawned: {(isEnemySpawned ? "enabled" : "disabled")}");
 
                 GUILayout.Label($"Unlimited Scan Range: {(isUnlimitedScanRangeEnabled ? "enabled" : "disabled")}");
                 GUILayout.Label($"Unlimited Item Power: {(isUnlimitedItemPowerEnabled ? "enabled" : "disabled")}");
@@ -474,6 +488,11 @@ namespace LCHack
                 if (GUILayout.Button("Toggle Night Vision"))
                 {
                     isNightVisionEnabled = !isNightVisionEnabled;
+                }
+
+                if (GUILayout.Button("Toggle Spawn Enemies"))
+                {
+                    isEnemySpawned = !isEnemySpawned;
                 }
 
                 if (GUILayout.Button("High Jump"))

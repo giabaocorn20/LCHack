@@ -103,7 +103,7 @@ namespace LCHack
     //Infinite Sprint
     public static class InfiniteSprintPatch
     {
-        [HarmonyPatch(typeof(PlayerControllerB), "LateUpdate")]
+        [HarmonyPatch(typeof(PlayerControllerB), "Update")]
         public static void Postfix(PlayerControllerB __instance)
         {
             // Infinite Sprint
@@ -127,17 +127,29 @@ namespace LCHack
     //High Jump
     public static class HighJumpPatch
     {
-        [HarmonyPatch(typeof(PlayerControllerB), "LateUpdate")]
+        private static float originalJumpForce;
+
+        [HarmonyPatch(typeof(PlayerControllerB), "Start")]
+        [HarmonyPrefix]
+        public static void getOGJumpForce(PlayerControllerB __instance)
+        {
+            originalJumpForce = __instance.jumpForce;
+        }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "Update")]
         public static void Postfix(PlayerControllerB __instance)
         {
             // High Jump
             if (!Hacks.Instance.isHighJumpEnabled)
+            {
+                __instance.jumpForce = originalJumpForce;
                 return;
+            }
 
             if (GameNetworkManager.Instance.localPlayerController.actualClientId != __instance.actualClientId)
                 return;
 
-            __instance.jumpForce = 50f;
+            __instance.jumpForce = 30f; 
         }
     }
 
@@ -194,4 +206,5 @@ namespace LCHack
             return true;
         }
     }
+
 }
