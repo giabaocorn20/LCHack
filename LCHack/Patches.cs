@@ -157,20 +157,42 @@ namespace LCHack
     //High Night Vision
     public static class NightVisionPatch
     {
+        private static float nightVisionIntensity;
+        private static Color nightVisionColor;
+        private static float nightVisionRange;
 
-        [HarmonyPatch(typeof(PlayerControllerB), "LateUpdate")]
-        [HarmonyPostfix]
-        public static void LateUpdatePostfix(PlayerControllerB __instance)
+        [HarmonyPatch(typeof(PlayerControllerB), "Start")]
+        [HarmonyPrefix]
+        static void getNightVision(ref PlayerControllerB __instance)
         {
-            // Night Vision
+            // store nightvision values
+            nightVisionIntensity = __instance.nightVision.intensity;
+            nightVisionColor = __instance.nightVision.color;
+            nightVisionRange = __instance.nightVision.range;
+        }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "SetNightVisionEnabled")]
+        [HarmonyPostfix]
+        static void updateNightVision(PlayerControllerB __instance)
+        {
+            //instead of enabling/disabling nightvision, set the variables
             if (!Hacks.Instance.isNightVisionEnabled)
+            {
+                __instance.nightVision.color = nightVisionColor;
+                __instance.nightVision.intensity = nightVisionIntensity;
+                __instance.nightVision.range = nightVisionRange;
                 return;
+            }
 
             if (GameNetworkManager.Instance.localPlayerController.actualClientId != __instance.actualClientId)
                 return;
-            __instance.nightVision.color = UnityEngine.Color.green;
-            __instance.nightVision.intensity = 1000f;
-            __instance.nightVision.range = 10000f;
+
+            
+                __instance.nightVision.color = UnityEngine.Color.white;
+                __instance.nightVision.intensity = 1000f;
+                __instance.nightVision.range = 1000f;
+   
+            // should always be on
             __instance.nightVision.enabled = true;
         }
     }
@@ -178,7 +200,7 @@ namespace LCHack
 
 
 
-    [HarmonyPatch]
+        [HarmonyPatch]
     //High Scrap Value
     public static class SyncScrapValuesClientRpcPatch
     {
@@ -207,4 +229,20 @@ namespace LCHack
         }
     }
 
+    [HarmonyPatch]
+    public static class isEnemySpawnablePatch
+    {
+        [HarmonyPatch(typeof(RoundManager), "EnemyCannotBeSpawned")]
+        public static bool Prefix(ref bool __result)
+        {
+            if (Hacks.Instance.isEnemySpawnableEnabled)
+            {
+                __result = true;
+                return false;
+            }
+
+            return true;
+        }
+    }
+   
 }

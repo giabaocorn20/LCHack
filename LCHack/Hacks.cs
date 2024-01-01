@@ -54,7 +54,7 @@ namespace LCHack
             public bool isHighScrapValueEnabled = false;
             public bool isHighJumpEnabled = false;
             public bool isNightVisionEnabled = false;
-            public bool isEnemySpawned = false;
+            public bool isEnemySpawnableEnabled = false;
 
             // create a class to store dead player information
             public class DeadPlayerInfo
@@ -463,9 +463,10 @@ namespace LCHack
 
                 GUILayout.Label($"God mode: {(isGodModeEnabled ? "enabled" : "disabled")}");
                 GUILayout.Label($"Infinite sprint: {(isInfiniteSprintEnabled ? "enabled" : "disabled")}");
+                GUILayout.Label($"Night Vision: {(isNightVisionEnabled ? "enabled" : "disabled")}");
                 GUILayout.Label($"High jump: {(isHighJumpEnabled ? "enabled" : "disabled")}");
-                GUILayout.Label($"Enemies spawned: {(isEnemySpawned ? "enabled" : "disabled")}");
-
+                GUILayout.Label($"Spawn Enemy: {(isEnemySpawnableEnabled ? "enabled" : "disabled")}");
+         
                 GUILayout.Label($"Unlimited Scan Range: {(isUnlimitedScanRangeEnabled ? "enabled" : "disabled")}");
                 GUILayout.Label($"Unlimited Item Power: {(isUnlimitedItemPowerEnabled ? "enabled" : "disabled")}");
                 GUILayout.Label($"High Scrap Value: {(isHighScrapValueEnabled ? "enabled" : "disabled")}");
@@ -490,9 +491,9 @@ namespace LCHack
                     isNightVisionEnabled = !isNightVisionEnabled;
                 }
 
-                if (GUILayout.Button("Toggle Spawn Enemies"))
+                if (GUILayout.Button("High Jump"))
                 {
-                    isEnemySpawned = !isEnemySpawned;
+                    isHighJumpEnabled = !isHighJumpEnabled;
                 }
 
                 if (GUILayout.Button("High Jump"))
