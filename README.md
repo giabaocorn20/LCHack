@@ -1,8 +1,8 @@
-# Lethal Company Hacks 
+# Lethal Company Hack Menu
 
 ## Introduction
 
-Welcome to the Lethal Company Mod Menu, a customizable modification for enhancing your gaming experience in Lethal Company. This mod introduces various features to empower your gameplay, and we'd like to acknowledge the contributions of the modding community whose work inspired and laid the foundation for this project.
+Welcome to the Lethal Company Hack Menu, a customizable modification for enhancing your gaming experience in Lethal Company. This mod introduces various features to empower your gameplay, and we'd like to acknowledge the contributions of the modding community whose work inspired and laid the foundation for this project.
 
 ## Functionality
 
