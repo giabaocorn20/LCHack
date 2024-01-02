@@ -28,7 +28,7 @@ Welcome to the Lethal Company Mod Menu, a customizable modification for enhancin
 - **High Scrap Value**: Increase the value of scrap items for enhanced rewards.
 
 ## Installation
-
+Download at the `release`
 To install the mod, ensure you have BepInEx installed. Follow these steps:
 
 1. Navigate to the BepInEx folder.
