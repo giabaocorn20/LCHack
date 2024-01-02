@@ -1,4 +1,4 @@
-# Lethal Company Mod Menu
+# Lethal Company Hacks 
 
 ## Introduction
 
