@@ -41,6 +41,6 @@ Once installed, activate the mod menu by pressing the `Insert` key during gamepl
 
 ## Credits
 
-I want to express my gratitude to the modding community for their invaluable contributions, which form the foundation of this mod menu. I must acknowledge that this mod is built on top of another mod menu creator, whose name unfortunately eludes me. I apologize for any oversight in crediting specific individuals and extend our thanks to everyone involved in elevating the excitement of Lethal Company.
+I want to express my gratitude to the modding community for their invaluable contributions, which form the foundation of this mod menu. I acknowledge that I got the template mod from the website unknowncheat.com from another mod menu creator (whose name unfortunately eludes me) and further developed it. I apologize for any oversight in crediting specific individuals and extend our thanks to everyone involved in elevating the excitement of Lethal Company.
 
 Enjoy an enriched gaming experience with the Lethal Company Mod Menu!
