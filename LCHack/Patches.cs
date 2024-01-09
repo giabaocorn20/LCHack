@@ -220,7 +220,7 @@ namespace LCHack
                         GrabbableObject component = networkObject.GetComponent<GrabbableObject>();
                         if (component != null)
                         {
-                            allScrapValue[i] = 420;
+                            allScrapValue[i] = 500;
                         }
                     }
                 }

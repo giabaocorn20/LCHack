@@ -242,12 +242,12 @@ namespace LCHack
                     {
                         if (GameNetworkManager.Instance.localPlayerController.IsServer)
                         {
-                            terminal.groupCredits += 200;
+                            terminal.groupCredits += 300;
                             addMoney = false;
                         }
                         else
                         {
-                            terminal.groupCredits += 200;
+                            terminal.groupCredits += 300;
                             terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
                             addMoney = false;
                         }
