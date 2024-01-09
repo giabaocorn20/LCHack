@@ -19,13 +19,13 @@ Welcome to the Lethal Company Hack Menu, a customizable modification for enhanci
 - **Unlimited Scan Range**: Expand your scanning capabilities without limits.
 
 ### Currency and Progression
-- **Add 200 Cash**: Boost your in-game currency with a simple button press.
+- **Add 300 Cash**: Boost your in-game currency with a simple button press.
 - **Set Level**: Customize your experience by setting your level in a lobby.
 - **Toggle Unlimited Item Power**: Unleash the full potential of your items without restrictions.
 
 ### Host-Exclusive Features
 - **Set Quota Reached**: Achieve your profit quota instantly.
-- **High Scrap Value**: Increase the value of scrap items for enhanced rewards.
+- **High Scrap Value**: Increase the value of scrap items for enhanced rewards (500 cash).
 
 ## Installation
 Download at the `release`
